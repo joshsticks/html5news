@@ -1,6 +1,55 @@
 var express = require('express');
 var app = express();
 
+var banners = [
+	{
+		id: 1,
+		message: "Josh Stickles T-Shirts and Temporary Tatoos Now Available in the CapTech Store."
+	},
+	{
+		id: 2,
+		message: "Available For a Limited Time Only, $19.99 + s/h."
+	}
+];
+
+var categories = [
+	{	
+		id: 1,
+		shortName: "world",
+		displayName: "WORLD"
+	},
+	{	
+		id: 2,
+		shortName: "business",
+		displayName: "BUSINESS"
+	},
+	{	
+		id: 3,
+		shortName: "sports",
+		displayName: "SPORTS"
+	},
+	{	
+		id: 4,
+		shortName: "fashion",
+		displayName: "FASHION & STYLE"
+	},
+	{	
+		id: 5,
+		shortName: "video",
+		displayName: "VIDEO"
+	},
+	{	
+		id: 6,
+		shortName: "opinion",
+		displayName: "OPINION"
+	},
+	{	
+		id: 7,
+		shortName: "travel",
+		displayName: "TRAVEL"
+	}
+];
+
 var articles = [
 	{ 
 		id: 1,
@@ -9,7 +58,7 @@ var articles = [
 		fullStory: 'Relaxing poolside and sipping a Cuba Libre, Josh Stickles reflects on a busy morning and ponders on what to do after lunch. In what is likely to become the most productive morning in recorded history, Josh Stickles won all of the events in the 2014 winter Olympics single-handedly before sketching out a cure for cancer on a napkin and texting it to Washington DC for validation and then, explained “rounding up”, thus fixing the world’s ailing economy. In what is likely to become the most productive morning  recorded history, Joshua Stickles won all of the events in the 2014 winter Olympics single-handedly before sketching out a  cure for cancer on a napkin and texting it to Washington DC for validation and then, explained “rounding up”, thus fixing the world’s ailing economy. In what likely to become productive morning in recorded history, Joshua Stickles won all of the events in the 2014 winter Olympics single-handedly before sketching out a cure for cancer on a napkin and texting it to Washington DC for validation and then, explained “rounding up”, thus fixing the world’s ailing economy.  In what is likely to become the most productive morning in recorded history, Joshua Stickles won all of the events in the 2014 winter Olympics single-handedly before sketching out a cure for cancer on a napkin and texting it to Washington DC for validation and then, explained “rounding up”, thus fixing world’s ailing economy.',
 		location: 'Sochi',
 		nsfw: false,
-		category: 'world',
+		category: 1,
 		relatedArticleIds: [10]
 	},
 	{ 
@@ -19,7 +68,7 @@ var articles = [
 		fullStory: "Direct trade selfies artisan locavore. Portland hoodie McSweeney's deep v slow-carb literally. Godard next level blog, street art American Apparel Austin meh kale chips you probably haven't heard of them pug. Umami direct trade 8-bit farm-to-table. Pickled fashion axe normcore, Intelligentsia you probably haven't heard of them cred cornhole four loko Odd Future gastropub yr sartorial sustainable. Pour-over kogi Helvetica next level. Polaroid Schlitz Banksy plaid occupy mustache. Paleo cray sriracha letterpress, raw denim craft beer Schlitz tousled cliche. Ennui retro mumblecore, Intelligentsia pug semiotics meggings. Quinoa XOXO Neutra lo-fi. Blog chia Etsy, Banksy try-hard Helvetica ennui. Church-key distillery meggings street art, roof party single-origin coffee freegan slow-carb. Blue Bottle tofu Odd Future, put a bird on it art party banh mi ethical vegan Austin banjo Pitchfork. Letterpress art party hashtag plaid, banjo yr bespoke lo-fi cornhole Terry Richardson. Asymmetrical Vice freegan banh mi. Chia actually Williamsburg four loko, plaid semiotics drinking vinegar occupy. Kitsch stumptown banjo Helvetica. Scenester High Life shabby chic Portland. Dreamcatcher pickled food truck, locavore umami banjo ethnic seitan Truffaut iPhone vinyl squid swag. Authentic irony keytar Shoreditch sartorial. Art party VHS Terry Richardson fashion axe, ethnic cornhole stumptown. Bicycle rights sustainable biodiesel, polaroid next level cornhole meggings occupy photo booth Odd Future. Aesthetic pop-up 8-bit mumblecore, Thundercats irony butcher shabby chic literally you probably haven't heard of them. Flannel roof party 90's direct trade tousled, flexitarian yr craft beer meggings distillery hoodie. Banh mi narwhal direct trade, photo booth art party lomo meggings street art asymmetrical vegan. Vegan tousled craft beer fanny pack, occupy paleo American Apparel Thundercats salvia flexitarian roof party stumptown quinoa Marfa ethnic. PBR ugh pour-over, tattooed cardigan bicycle rights banjo beard paleo flannel. Synth squid photo booth typewriter lo-fi, irony authentic drinking vinegar Etsy pop-up mumblecore.",
 		location: 'Palo Alto',
 		nsfw: false,
-		category: 'business',
+		category: 2,
 		relatedArticleIds: [3,4]
 	},
 	{ 
@@ -29,7 +78,7 @@ var articles = [
 		fullStory: "+1 DIY seitan, freegan asymmetrical umami vinyl mumblecore retro Austin fingerstache bitters shabby chic. Try-hard Cosby sweater Echo Park Pitchfork Odd Future readymade. Vegan tattooed cray fixie, ugh PBR brunch. Wes Anderson viral kogi letterpress put a bird on it yr hoodie. Williamsburg mustache vegan organic. Kogi beard viral, Williamsburg mlkshk retro actually kitsch drinking vinegar banh mi. Tonx semiotics Portland shabby chic, organic +1 bespoke slow-carb photo booth. Distillery Wes Anderson paleo,  VHS fashion axe meggings tote bag occupy four loko mustache ugh Carles freegan wolf. Mustache selvage YOLO, bitters ugh next level synth 3 wolf moon tattooed. Put a bird on it flexitarian keffiyeh before they sold out wolf. Helvetica McSweeney's photo booth bespoke, occupy organic keffiyeh authentic. Mustache meggings forage kitsch fingerstache. Skateboard post-ironic American Apparel cred Terry Richardson, pour-over you probably haven't heard of them VHS  pork belly farm-to-table scenester Schlitz four loko. Squid Williamsburg kale chips, deep v distillery craft beer tofu Bushwick. Typewriter +1 Pitchfork normcore cardigan Carles. Semiotics four loko blog, scenester umami plaid tote bag locavore forage brunch banjo ennui sartorial gentrify pour-over. Actually Echo Park YOLO, photo booth umami direct trade PBR&B paleo McSweeney's Shoreditch scenester street art disrupt roof party brunch. Wayfarers fashion axe organic before they sold out. Raw denim Brooklyn post-ironic, iPhone mixtape vegan XOXO. Bitters jean shorts pug, Williamsburg paleo tote bag irony Echo Park synth VHS cardigan kitsch. Paleo kitsch flexitarian chambray fanny pack, stumptown Shoreditch Pitchfork PBR&B hella Tonx whatever butcher photo booth. Pickled tofu dreamcatcher flexitarian. Bushwick fanny pack irony, leggings chia vinyl Godard actually locavore  PBR&B pickled. Asymmetrical Marfa Terry Richardson, kale chips single-origin coffee Brooklyn yr Helvetica. Actually Cosby sweater gastropub, swag banh mi asymmetrical polaroid leggings keytar synth. Normcore letterpress ennui bicycle rights literally Truffaut. Kitsch Shoreditch cardigan slow-carb, wayfarers post-ironic you probably haven't heard of them mixtape tofu gluten-free chia direct trade disrupt. Vice semiotics pork belly vinyl, PBR cornhole Pitchfork.",
 		location: 'Redmond, Washington',
 		nsfw: true,
-		category: 'business',
+		category: 3,
 		relatedArticleIds: [4,5]
 	},
 	{ 
@@ -39,7 +88,7 @@ var articles = [
 		fullStory: "XOXO before they sold out tofu raw denim Tumblr cornhole, Odd Future irony pork belly chambray. Wayfarers selfies farm-to-table, actually Neutra you probably haven't heard of them try-hard tote bag keytar Brooklyn narwhal hashtag direct trade bitters scenester. Chambray Tumblr 3 wolf moon pug, mumblecore Banksy slow-carb mlkshk aesthetic plaid bitters. Pickled twee plaid mixtape chia. Banksy twee tattooed Pitchfork meh Pinterest, viral banh mi jean shorts. Vice normcore ugh you probably haven't heard of them, asymmetrical jean shorts tofu Austin messenger bag lo-fi fixie. Roof party post-ironic typewriter disrupt Banksy, Tumblr Schlitz before they sold out leggings kale chips actually shabby chic pug. Craft beer butcher forage sriracha, tote bag Helvetica Schlitz food truck Godard fixie put a bird on it roof party Pinterest. Skateboard farm-to-table mixtape PBR Odd Future occupy Cosby sweater organic Shoreditch, artisan post-ironic. Irony readymade Echo Park synth. Keffiyeh chillwave farm-to-table meggings Odd Future. Biodiesel asymmetrical viral kogi pour-over, pork belly mlkshk trust fund fingerstache mumblecore. Mumblecore semiotics literally Echo Park vinyl. You probably haven't heard of them organic YOLO Wes Anderson. Shabby chic Cosby sweater banh mi ethical Odd Future stumptown wayfarers 8-bit. Kogi ethical plaid Neutra sriracha kitsch viral. Organic normcore cred, raw denim next level deep v before they sold out polaroid art party church-key. Keytar Helvetica single-origin coffee chillwave kitsch, try-hard PBR organic jean shorts Marfa skateboard. Wolf single-origin coffee master cleanse Thundercats sartorial pork belly, scenester umami sustainable Pinterest. Tote bag swag gentrify, ethical authentic skateboard kogi. 3 wolf moon chia cardigan, keffiyeh tofu keytar disrupt kitsch ennui ethnic Pitchfork. IPhone skateboard mlkshk kitsch, banjo hella cornhole tousled whatever ethnic semiotics Neutra trust fund keffiyeh leggings. American Apparel shabby chic chia, Echo Park squid High Life you probably haven't heard of them ennui VHS vegan viral ugh mlkshk. Swag sustainable Cosby sweater, chia jean shorts roof party wolf pork belly. Readymade authentic fixie polaroid try-hard, wolf locavore mlkshk kogi Marfa Wes Anderson single-origin coffee leggings freegan. Lomo polaroid direct trade chia. Post-ironic slow-carb authentic pug hella, Helvetica cred Terry Richardson cliche deep v food truck. Hoodie farm-to-table church-key, Tumblr +1 cardigan mlkshk chia quinoa Terry Richardson gluten-free.",
 		location: 'New York',
 		nsfw: false,
-		category: 'business',
+		category: 4,
 		relatedArticleIds: [5,6]
 	},
 	{ 
@@ -49,7 +98,7 @@ var articles = [
 		fullStory: "Slow-carb Helvetica Austin Odd Future food truck asymmetrical. Raw denim biodiesel banh mi, pop-up Bushwick keytar try-hard aesthetic leggings. Godard flannel church-key pork belly, vegan Austin selfies semiotics fingerstache VHS stumptown farm-to-table authentic street art. High Life cardigan twee, farm-to-table bicycle rights fixie McSweeney's bespoke small batch typewriter viral swag cornhole irony. Tonx Portland mlkshk, photo booth cornhole semiotics bitters you probably haven't heard of them. Etsy Shoreditch pickled food truck sustainable, raw denim keffiyeh yr Helvetica Tumblr occupy narwhal. Gluten-free organic four loko, distillery YOLO bitters Wes Anderson  kogi next level occupy tote bag tofu. Helvetica typewriter keytar, slow-carb tousled squid semiotics put a bird on it umami jean shorts try-hard polaroid vegan Pitchfork. Gluten-free street art Terry Richardson 8-bit artisan. Photo booth squid literally, American Apparel distillery skateboard +1 Marfa. Cray locavore quinoa bitters. Bitters trust fund before they sold out farm-to-table Blue Bottle. Austin bicycle rights tote bag dreamcatcher, occupy Terry Richardson 90's sustainable. Selvage lomo Tonx, banjo retro dreamcatcher PBR drinking vinegar pork belly banh mi craft beer aesthetic bicycle rights meh. Ugh cliche Portland swag sriracha, readymade food truck quinoa dreamcatcher lo-fi whatever brunch. Forage cardigan narwhal, banh mi swag slow-carb pop-up literally. Brooklyn squid twee Carles. Letterpress kale chips put a bird on it four loko, banh mi irony twee cornhole High Life before they sold out. Meh hashtag +1 Neutra, quinoa bitters fingerstache Godard mixtape asymmetrical. XOXO +1 Neutra pour-over, you probably haven't heard of them trust fund mixtape Tonx narwhal Carles. Tonx bicycle rights banjo, pug hoodie Cosby sweater retro pour-over slow-carb Etsy meggings. Terry Richardson salvia Godard, mustache semiotics put a bird on it Blue Bottle pour-over. Raw denim twee chia photo booth quinoa. Ethical flannel Helvetica Neutra, pug blog Thundercats beard occupy post-ironic asymmetrical yr banjo four loko retro. Flexitarian VHS polaroid, locavore cray Neutra iPhone wayfarers. Hella Schlitz brunch, dreamcatcher Banksy selvage shabby chic pop-up. Wayfarers tofu iPhone church-key, gentrify meh put a bird on it readymade squid food truck literally you probably haven't heard of them. Put a bird on it PBR&B XOXO whatever.",
 		location: 'East Rutherford, NJ',
 		nsfw: false,
-		category: 'sports',
+		category: 5,
 		relatedArticleIds: [6,7]
 	},
 	{ 
@@ -59,7 +108,7 @@ var articles = [
 		fullStory: 'In the heart of the nation’s capitol, the United States government has been working on a secret plan to fix everything, everywhere. Codenamed FEE, for Fix Everything Everywhere, this plan would fix everything including the government, which many would argue, in itself, is broken. In a small lab in Langley, Virginia, Dr. Josh Stickles has been quietly working on FEE on his free nights and weekends. Using only an iPhone, a few paper clips, and a roll of duct tape, Dr. Stickles has been able to create , with a single swipe on a smartphone, the ability for anyone to fix everything everywhere. The app is expected to cost $.99 on the iTunes App Store in July.',
 		location: 'Washington, DC',
 		nsfw: false,
-		category: 'opinion',
+		category: 6,
 		relatedArticleIds: [7,8]
 	},
 	{ 
@@ -69,7 +118,7 @@ var articles = [
 		fullStory: 'While many Apple rumors can be difficult to rank for accuracy, it is all but a done deal that the next iPhone will be called the iPhone Josh S. Tim Cook, said during the most recent CES conference that, “We have looked it at every way possible and decided there is simply no good reason to NOT call it the iPhone Josh S so that is what we are going to do. Shares of Apple closed up $675.22 on the news in active trading.',
 		location: 'Cupertino, CA',
 		nsfw: false,
-		category: 'opinion',
+		category: 6,
 		relatedArticleIds: [8,9]
 	},
 	{ 
@@ -79,7 +128,7 @@ var articles = [
 		fullStory: "Keffiyeh brunch single-origin coffee kogi street art selvage. Lomo authentic flexitarian bitters, swag forage salvia pop-up sartorial. Brooklyn banh mi occupy Cosby sweater semiotics direct trade cliche, paleo leggings roof party four loko. Forage Shoreditch pop-up, direct trade Truffaut keffiyeh ethnic post-ironic dreamcatcher DIY narwhal readymade fashion axe bitters jean shorts. Hashtag bitters Bushwick, fixie trust fund photo booth you probably haven't heard of them keffiyeh Schlitz keytar chillwave semiotics. Ethnic Schlitz Williamsburg PBR&B, PBR readymade ethical . Disrupt typewriter Cosby sweater meggings normcore mixtape. Cred aesthetic lomo before they sold out readymade Vice meh iPhone. Tousled Williamsburg literally messenger bag roof party. Messenger bag 90's Etsy, Wes Anderson single-origin coffee cray Pinterest ethnic sriracha Cosby sweater actually four loko mustache. Echo Park organic pug fingerstache Shoreditch pour-over 3 wolf moon. Gluten-free viral pork belly, banh mi Vice normcore Banksy street art. Roof party leggings PBR&B, 3 wolf moon mumblecore hoodie ethnic master cleanse  disrupt skateboard street art art party. Thundercats Cosby sweater lomo hashtag shabby chic brunch plaid authentic. Bitters biodiesel food truck lomo vegan, Etsy fixie art party artisan occupy Cosby sweater. YOLO dreamcatcher asymmetrical XOXO. Stumptown butcher blog, cornhole seitan deep v next level occupy 8-bit PBR authentic fashion axe letterpress. Odd Future bespoke dreamcatcher iPhone wayfarers selfies keffiyeh Neutra Blue Bottle letterpress, scenester kogi aesthetic literally single-origin coffee. Terry Richardson selvage single-origin coffee direct trade McSweeney's Intelligentsia. Next level PBR aesthetic Blue Bottle, drinking vinegar deep v wolf PBR&B beard mixtape master cleanse 8-bit photo booth hoodie Brooklyn. Retro you probably haven't heard of them readymade Pinterest literally High Life whatever, slow-carb brunch sriracha lomo iPhone skateboard stumptown vinyl. Normcore gluten-free keffiyeh, actually hella High Life flannel tattooed. Keytar gluten-free tote bag, Schlitz deep v fixie High Life actually before they sold out skateboard ethical organic readymade. Intelligentsia XOXO PBR semiotics, chia Helvetica banh mi 90's Echo Park. Post-ironic biodiesel fixie Cosby sweater Odd Future. Distillery food truck mumblecore, fixie kitsch roof party next level fingerstache four loko flexitarian hella. Vinyl letterpress post-ironic, before they sold out gluten-free swag distillery jean shorts slow-carb narwhal Austin. Direct trade quinoa keytar, Shoreditch Truffaut PBR salvia lomo dreamcatcher scenester umami viral leggings.",
 		location: 'Orlando, FL',
 		nsfw: false,
-		category: 'travel',
+		category: 7,
 		relatedArticleIds: [9,2]
 	},
 	{ 
@@ -89,7 +138,7 @@ var articles = [
 		fullStory: "Dreamcatcher farm-to-table semiotics readymade, swag drinking vinegar meggings squid. Butcher tattooed pour-over bespoke. Pop-up salvia chia, kitsch single-origin coffee jean shorts McSweeney's dreamcatcher letterpress ethnic. Etsy you probably haven't heard of them twee keffiyeh, before they sold out Carles 90's gastropub selvage beard retro roof party. Brunch swag cornhole disrupt, narwhal actually Portland paleo skateboard salvia. Shoreditch cliche flannel, Godard Portland irony narwhal you probably haven't heard of them quinoa Vice iPhone keytar kitsch. Portland +1 Odd Future brunch photo booth. Selvage Bushwick photo booth, small batch hoodie meh tattooed Williamsburg fixie post-ironic. VHS hoodie Vice, Cosby sweater vegan leggings 8-bit Truffaut mixtape DIY you probably haven't heard of them bicycle rights pug beard master cleanse. Blue Bottle selvage irony scenester Portland. Cornhole ethical swag Schlitz banh mi synth. Neutra Echo Park chillwave, viral bespoke  forage scenester single-origin coffee church-key retro normcore pour-over. Mixtape bespoke Neutra master cleanse retro Cosby sweater. Readymade PBR&B tousled chia Carles. Lo-fi craft beer seitan, wolf synth iPhone ennui roof party paleo kale chips Thundercats ugh. Distillery tattooed meh sartorial try-hard cray. Kogi readymade cred banjo before they sold out food truck salvia. You probably haven't heard of them mustache fashion axe sustainable. Narwhal Austin four loko, ethnic McSweeney's pickled literally Bushwick. Shoreditch skateboard Truffaut beard, Etsy American Apparel squid tofu roof party lo-fi letterpress 3 wolf moon butcher asymmetrical pour-over. Freegan ennui VHS +1, post-ironic shabby chic semiotics. Odd Future lomo cornhole small batch mlkshk tote bag. Synth Terry Richardson keffiyeh mumblecore Pitchfork sriracha Pinterest. Raw denim quinoa hoodie, art party Vice kale chips Intelligentsia normcore . Ethical semiotics fingerstache, Tonx chillwave Marfa Echo Park. Banksy craft beer ennui four loko, cardigan cliche fashion axe. Pug Intelligentsia VHS, Carles aesthetic cliche pickled hella plaid kale chips Terry Richardson polaroid synth. Leggings kogi cardigan Wes Anderson, tousled fashion axe Odd Future Vice 90's butcher farm-to-table umami direct trade.",
 		location: 'Jefferson City, MO',
 		nsfw: false,
-		category: 'travel',
+		category: 7,
 		relatedArticleIds: [2,3]
 	},
 	{ 
@@ -99,7 +148,7 @@ var articles = [
 		fullStory: 'Thousands of the nation’s curious and devoted showed up before dawn to perhaps catch a glimpse of what one man claims is, “the very image of Josh Stickles himself except it is a gourd”. The gourd, which is actually the size of a human head, by most accounts does indeed bear an uncanny resemblance to Dr. Joshua Stickles of the United States withthe notable exception that Mr. Stickles head is not green. Thousands of the nation’s curious and devoted showed up before dawn to perhaps catch a glimpse of what one man claims is, “the very image of Josh Stickles himself except it is a gourd”. The gourd, which is actually the size of a human head, by most accounts does indeed bear an uncanny resemblance to Dr. Joshua Stickles of the United States with the notable exception that Mr. Stickles head is not green. Thousands of the nation’s curious and devoted showed up before dawn to perhaps catch a glimpse of what one man claims is, “the very image of Josh Stickles himself except it is a gourd”. The gourd, which is actually the size of a human head, by most accounts does indeed bear an uncanny resemblance to Dr. Joshua Stickles of the United States with the notable exception that Mr. Stickles head is not green. Thousands of the nation’s curious and devoted showed up before dawn to perhaps catch a glimpse of what one man claims is, “the very image of Josh Stickles himself except it is a gourd”. The gourd, which is actually the size of a human head, by most accounts does indeed bear an uncanny resemblance to Dr. Joshua Stickles of the United States with the notable exception that Mr. Stickles head is not green.',
 		location: 'Parma Italy',
 		nsfw: false,
-		category: 'fashion',
+		category: 4,
 		relatedArticleIds: [1]
 	},
 ];
@@ -122,6 +171,47 @@ app.get('/articles/all', function(req, res){
 	res.setHeader('Content-Type', 'application/json');
 	
 	res.end(JSON.stringify(articles));
+});
+
+app.get('/articles/category/:id', function(req, res){
+	
+	res.setHeader('Content-Type', 'application/json');
+
+	var categoryArticles = [];
+	for(var i = 0; i < articles.length; ++i) {
+    		if(articles[i].category == req.params.id) {
+        		categoryArticles.push(articles[i]);
+    		}
+	}
+
+	res.end(JSON.stringify(categoryArticles));
+});
+
+app.get('/articles/:id', function(req, res){
+	
+	res.setHeader('Content-Type', 'application/json');
+	for(var i = 0, m = null; i < articles.length; ++i) {
+    		if(articles[i].id == req.params.id) {
+        		m = articles[i];
+        		break;
+    		}
+	}
+
+	res.end(JSON.stringify(m));
+});
+
+app.get('/banners', function(req, res){
+	
+	res.setHeader('Content-Type', 'application/json');
+	
+	res.end(JSON.stringify(banners));
+});
+
+app.get('/categories', function(req, res){
+	
+	res.setHeader('Content-Type', 'application/json');
+	
+	res.end(JSON.stringify(categories));
 });
 
 app.listen( process.env.PORT || 3000);
