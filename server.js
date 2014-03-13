@@ -169,6 +169,7 @@ app.use (function(req, res, next) {
 app.get('/articles/all', function(req, res){
 	
 	res.setHeader('Content-Type', 'application/json');
+	res.header("Access-Control-Allow-Origin", "*");
 	
 	res.end(JSON.stringify(articles));
 });
@@ -176,6 +177,7 @@ app.get('/articles/all', function(req, res){
 app.get('/articles/category/:id', function(req, res){
 	
 	res.setHeader('Content-Type', 'application/json');
+	res.header("Access-Control-Allow-Origin", "*");
 
 	var categoryArticles = [];
 	for(var i = 0; i < articles.length; ++i) {
@@ -190,6 +192,7 @@ app.get('/articles/category/:id', function(req, res){
 app.get('/articles/:id', function(req, res){
 	
 	res.setHeader('Content-Type', 'application/json');
+	res.header("Access-Control-Allow-Origin", "*");
 	for(var i = 0, m = null; i < articles.length; ++i) {
     		if(articles[i].id == req.params.id) {
         		m = articles[i];
@@ -203,6 +206,7 @@ app.get('/articles/:id', function(req, res){
 app.get('/banners', function(req, res){
 	
 	res.setHeader('Content-Type', 'application/json');
+	res.header("Access-Control-Allow-Origin", "*");
 	
 	res.end(JSON.stringify(banners));
 });
@@ -210,6 +214,7 @@ app.get('/banners', function(req, res){
 app.get('/categories', function(req, res){
 	
 	res.setHeader('Content-Type', 'application/json');
+	res.header("Access-Control-Allow-Origin", "*");
 	
 	res.end(JSON.stringify(categories));
 });
