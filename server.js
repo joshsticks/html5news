@@ -59,7 +59,9 @@ var articles = [
 		location: 'Sochi',
 		nsfw: false,
 		category: 1,
-		relatedArticleIds: [10]
+		relatedArticleIds: [10],
+		hasVideoPlaceholder: false,
+		numberOfImages: 1
 	},
 	{ 
 		id: 2,
@@ -69,7 +71,9 @@ var articles = [
 		location: 'Palo Alto',
 		nsfw: false,
 		category: 2,
-		relatedArticleIds: [3,4]
+		relatedArticleIds: [3],
+		hasVideoPlaceholder: false,
+		numberOfImages: 0
 	},
 	{ 
 		id: 3,
@@ -79,7 +83,9 @@ var articles = [
 		location: 'Redmond, Washington',
 		nsfw: true,
 		category: 3,
-		relatedArticleIds: [4,5]
+		relatedArticleIds: [4],
+		hasVideoPlaceholder: true,
+		numberOfImages: 0
 	},
 	{ 
 		id: 4,
@@ -89,7 +95,9 @@ var articles = [
 		location: 'New York',
 		nsfw: false,
 		category: 4,
-		relatedArticleIds: [5,6]
+		relatedArticleIds: [5],
+		hasVideoPlaceholder: false,
+		numberOfImages: 0
 	},
 	{ 
 		id: 5,
@@ -99,7 +107,9 @@ var articles = [
 		location: 'East Rutherford, NJ',
 		nsfw: false,
 		category: 5,
-		relatedArticleIds: [6,7]
+		relatedArticleIds: [6],
+		hasVideoPlaceholder: false,
+		numberOfImages: 1
 	},
 	{ 
 		id: 6,
@@ -109,7 +119,9 @@ var articles = [
 		location: 'Washington, DC',
 		nsfw: false,
 		category: 6,
-		relatedArticleIds: [7,8]
+		relatedArticleIds: [7],
+		hasVideoPlaceholder: false,
+		numberOfImages: 0
 	},
 	{ 
 		id: 7,
@@ -119,7 +131,9 @@ var articles = [
 		location: 'Cupertino, CA',
 		nsfw: false,
 		category: 6,
-		relatedArticleIds: [8,9]
+		relatedArticleIds: [8],
+		hasVideoPlaceholder: false,
+		numberOfImages: 1
 	},
 	{ 
 		id: 8,
@@ -129,7 +143,9 @@ var articles = [
 		location: 'Orlando, FL',
 		nsfw: false,
 		category: 7,
-		relatedArticleIds: [9,2]
+		relatedArticleIds: [9],
+		hasVideoPlaceholder: false,
+		numberOfImages: 2
 	},
 	{ 
 		id: 9,
@@ -139,7 +155,9 @@ var articles = [
 		location: 'Jefferson City, MO',
 		nsfw: false,
 		category: 7,
-		relatedArticleIds: [2,3]
+		relatedArticleIds: [2],
+		hasVideoPlaceholder: false,
+		numberOfImages: 1
 	},
 	{ 
 		id: 10,
@@ -149,7 +167,9 @@ var articles = [
 		location: 'Parma Italy',
 		nsfw: false,
 		category: 4,
-		relatedArticleIds: [1]
+		relatedArticleIds: [1],
+		hasVideoPlaceholder: false,
+		numberOfImages: 1
 	},
 ];
 
@@ -174,15 +194,35 @@ app.get('/articles/all', function(req, res){
 	res.end(JSON.stringify(articles));
 });
 
+app.get('/articles/featured', function(req, res){
+	
+	res.setHeader('Content-Type', 'application/json');
+	res.header("Access-Control-Allow-Origin", "*");
+	
+	var featured = {
+		aside: articles.slice(0,2),
+		main: articles.slice(2, 5),
+		opinion: articles.slice(5, 7),
+		travel: articles.slice(7, 9)
+	}
+	res.end(JSON.stringify(featured));
+});
+
 app.get('/articles/category/:id', function(req, res){
 	
 	res.setHeader('Content-Type', 'application/json');
 	res.header("Access-Control-Allow-Origin", "*");
 
-	var categoryArticles = [];
+	var categoryArticles = {};
 	for(var i = 0; i < articles.length; ++i) {
     		if(articles[i].category == req.params.id) {
-        		categoryArticles.push(articles[i]);
+        		categoryArticles.main = articles[i];
+    		}
+	}
+
+	for(var i = 0; i < articles.length; ++i) {
+    		if(articles[i].id == categoryArticles.main.relatedArticleIds[0]) {
+        		categoryArticles.aside = articles[i];
     		}
 	}
 
@@ -214,7 +254,7 @@ app.get('/banners', function(req, res){
 app.get('/categories', function(req, res){
 	
 	res.setHeader('Content-Type', 'application/json');
-	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Origin", "*");	
 	
 	res.end(JSON.stringify(categories));
 });
