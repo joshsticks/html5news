@@ -208,6 +208,14 @@ app.get('/articles/featured', function(req, res){
 	res.end(JSON.stringify(featured));
 });
 
+app.get('/articles/categories', function(req, res){
+	
+	res.setHeader('Content-Type', 'application/json');
+	res.header("Access-Control-Allow-Origin", "*");	
+	
+	res.end(JSON.stringify(categories));
+});
+
 app.get('/articles/category/:id', function(req, res){
 	
 	res.setHeader('Content-Type', 'application/json');
