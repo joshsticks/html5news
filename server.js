@@ -237,6 +237,27 @@ app.get('/articles/category/:id', function(req, res){
 	res.end(JSON.stringify(categoryArticles));
 });
 
+app.get('/category/:id', function(req, res){
+	
+	res.setHeader('Content-Type', 'application/json');
+	res.header("Access-Control-Allow-Origin", "*");
+
+	var categoryArticles = {};
+	for(var i = 0; i < articles.length; ++i) {
+    		if(articles[i].category == req.params.id) {
+        		categoryArticles.main = articles[i];
+    		}
+	}
+
+	for(var i = 0; i < articles.length; ++i) {
+    		if(articles[i].id == categoryArticles.main.relatedArticleIds[0]) {
+        		categoryArticles.aside = articles[i];
+    		}
+	}
+
+	res.end(JSON.stringify(categoryArticles));
+});
+
 app.get('/articles/:id', function(req, res){
 	
 	res.setHeader('Content-Type', 'application/json');
